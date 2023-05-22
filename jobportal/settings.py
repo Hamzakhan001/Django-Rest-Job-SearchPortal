@@ -162,13 +162,15 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SOCIALACCOUNT_QUERY_EMAIL = True
+
+AWS_DEFAULT_ACL = 'public-read'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, 'static')
+# STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, 'static')
 STATIC_ROOT = 'static/'
 
-MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, 'media')
+# MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, 'media')
 MEDIA_ROOT = 'media/'
 
 # Default primary key field type
