@@ -26,3 +26,11 @@ class Profile(models.Model):
     looking_for=models.CharField(max_length=30, choices=CHOICES, default='Full Time',null=True)
     slug=AutoSlugField(populate_from='user',unique=True)
     
+    def get_absolute_url(self):
+        return "/profile/{}".format(self.slug)
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        
+    def __str__(self):
+        return self.user.username
