@@ -47,3 +47,12 @@ class SavedJobs(models.Model):
 
     def __str__(self):
         return self.job.title;
+    
+
+class AppliedJobs(models.Model):
+    job=models.ForeignKey(Job, related_name='applied_job', on_delete=models.CASCADE)
+    user=models.ForeignKey(User,related_name='applied_user',on_delete=models.CASCADE)
+    date_posted=models.DateTimeField()
+    
+    def __str__(self):
+        return self.job.title
