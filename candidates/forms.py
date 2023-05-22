@@ -9,3 +9,7 @@ class ProfileUpdateForm(forms.ModelForm):
         fields=['full_name','country','location','resume', 'grad_year', 'looking_for']
         
 
+class NewSkill(forms.ModelForm):
+    class Meta:
+        model=Skill
+        fields = ['skill']
