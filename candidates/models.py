@@ -34,3 +34,8 @@ class Profile(models.Model):
         
     def __str__(self):
         return self.user.username
+    
+class Skill(models.Model):
+    skill=models.CharField(max_length=200)
+    user=models.ForeignKey(User, related_name='skills', on_delete=models.CASCADE)
+    
