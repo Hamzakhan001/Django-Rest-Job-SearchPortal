@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import AppliedJobs,Profile,SavedJobs,Skill
-
+from .forms import ProfileUpdateForm, NewSkillForm
 
 
 
@@ -159,3 +159,19 @@ def my_profile(request):
         'profile_page': "active",
 	}
     return render(request,'candidates/profile.html',context)
+
+
+
+@login_required
+def edit_profile(request):
+    you=request.user
+    profile=Profile.objects.filter(user=you).first()
+    if request.method=="POST":
+        form=ProfileUpdateForm(request.POST,request.Files,instance=profile)
+        if form.is_valid():
+            data=form.save(commit=False)
+            data.user=you
+            data.save()
+            return redirect('my-profile')
+    else:
+        form=ProfileUpdateForm(instance=profile)
