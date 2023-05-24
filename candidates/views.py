@@ -42,5 +42,33 @@ def job_search_list(request):
         paginator= Paginator(final_list,20)
         page_number= request.GET.get('page')
         page_obj=paginator.get_page(page_number)
+        
+        context={
+			'jobs':page_obj,
+			'query':query
+		}
+        
+        return render(request, 'candidates/job_search_list.html',context)
+        
          
+def job_detail(request,slug):
+    job=get_object_or_404(Job, slug=slug)
+    apply_btn=0
+    save_btn=0
     
+    profile=Profile.object.filter(user=request.user).first()
+    if AppliedJobs.objects.filter(user=request.user).filter(job=job).exists():
+        apply_btn=1
+    if SavedJobs.objects.filter(user=request.user).filter(job=job).exists():
+        save_btn=1
+    
+    relevant_jobs=[]
+    jobs1=Job.objects.filter(
+		company__icontains=job.company).order_by('-date_posted')
+    jobs2=Job.objects.filter(job_type_icontains=job.job_type).order_by('-date_posted')
+    jobs3=Job.objects.filter(title__icontains=job.title).order_by('-date_posted')
+    
+    
+    
+    
+	
