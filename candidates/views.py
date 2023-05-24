@@ -1,7 +1,18 @@
 from django.shortcuts import render
 from .models import AppliedJobs,Profile,SavedJobs,Skill
+from recruiters.models import Job, Applicants, Selected
 from .forms import ProfileUpdateForm, NewSkillForm
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.views.generic import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator
 
 
 
@@ -208,3 +219,20 @@ def apply_job(request,slug):
     job=get_object_or_404(Job,slug=slug)
     applied,created=AppliedJobs.objects.get_or_create(job=job,user=user)
     
+
+
+@login_required
+def apply_job(request,slug):
+    user=request.user
+    job=get_object_or_404(Job,slug=slug)
+    applied,created=AppliedJobs.objects.get_or_create(job=job,user=user)
+    applicant,creation= Applicants.objects.get_or_create(job=job,applicant=user)
+    return HttpResponseRedirect('/job/{}'.format(job.slug))
+
+@login_required
+def remove_job(request, slug):
+    user = request.user
+    job = get_object_or_404(Job, slug=slug)
+    saved_job = SavedJobs.objects.filter(job=job, user=user).first()
+    saved_job.delete()
+    return HttpResponseRedirect('/job/{}'.format(job.slug))
