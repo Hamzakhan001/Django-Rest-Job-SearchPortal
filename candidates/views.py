@@ -175,3 +175,29 @@ def edit_profile(request):
             return redirect('my-profile')
     else:
         form=ProfileUpdateForm(instance=profile)
+    context = {
+        'form': form,
+    }
+    return render(request,'candidates/edit_profile.html', context)
+
+@login_required
+def profile_view(request,slug):
+    p=Profile.objects.filter(slug=slug).first()
+    you=p.user
+    user_skills=Skill.objects.filter(user=you)
+    context={
+        'u':you,
+        'profile':p,
+        'skills':user_skills
+    }
+    return render(request,'candidates/profile.html',context)
+
+    
+
+
+@login_required
+def apply_job(request,slug):
+    user=request.user
+    job=get_object_or_404(Job,slug=slug)
+    applied,created=AppliedJobs.objects.get_or_create(job=job,user=user)
+    
