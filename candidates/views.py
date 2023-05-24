@@ -192,7 +192,14 @@ def profile_view(request,slug):
     }
     return render(request,'candidates/profile.html',context)
 
-    
+@login_required
+@csrf_exempt
+def delete_skill(request,pk=None):
+    if request.method == "POST":
+        id_list=request.POST.getlist('choices')
+        for skill in id_list:
+            Skill.objects.get(id=skill_id).delete()
+        return redirect('my-profile')
 
 
 @login_required
