@@ -136,4 +136,26 @@ def intelligent_search(request):
         common_skills=list(set(my_skills) & set(skills))
     
         
-    
+
+@login_required
+def my_profile(request):
+    you=request.user
+    profile=Profile.objects.filter(user=you).first()
+    user_skills=Skill.objects.filter(user=you)
+    if request.method == "POST":
+        form=NewSkillForm(request.POST)
+        if form.is_valid():
+            data=form.save(commit=False)
+            data.user=you
+            data.save()
+            return redirect('my-profile')
+    else:
+        form= NewSkillForm()
+    context={
+		'u':you,
+		'profile': profile,
+        'skills': user_skills,
+        'form': form,
+        'profile_page': "active",
+	}
+    return render(request,'candidates/profile.html',context)
