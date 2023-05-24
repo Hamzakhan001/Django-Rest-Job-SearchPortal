@@ -115,5 +115,25 @@ def intelligent_search(request):
     relevant_jobs=[]
     common=[]
     job_skills=[]
+    user=request.user
+    profile=Profile.objects.filter(user=user).first()
+    my_skill_query=Skill.objects.filter(user=user)
+    my_skills=[]
+    for i in my_skill_query:
+        my_skills.append(i.skill.lower())
+    if profile:
+        jobs=Job.objects.filter(
+			job_type=profile.looking_for
+		).order_by('-date_posted')
+    else:
+        jobs=Job.objects.all()
+    for job in jobs:
+        skills=[]
+        sk=str(job.skills_req).split(",")
+        for i in sk:
+            skills.append(i.strip().lower())
+        
+        common_skills=list(set(my_skills) & set(skills))
+    
         
     
