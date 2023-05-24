@@ -68,7 +68,24 @@ def job_detail(request,slug):
     jobs2=Job.objects.filter(job_type_icontains=job.job_type).order_by('-date_posted')
     jobs3=Job.objects.filter(title__icontains=job.title).order_by('-date_posted')
     
+    for i in jobs1:
+        if len(relevant_jobs)>5:
+            break;
+        if i not in relevant_jobs and i!=job:
+                relevant_jobs.append(i)
     
-    
+    for i in jobs2:
+        if len(relevant_jobs)>5:
+            break;
+        if i not in relevant_jobs and i != job:
+            relevant_jobs.append(i)
+            
+    for i in jobs3:
+        if len(relevant_jobs) >5:
+            break;
+        if i not in relevant_jobs and i != job:
+            relevant_jobs.append(i)
+            
+    return render(request, 'candidates/job_detail.html',{'job':job , 'profile':profile,'apply_button': apply_btn, 'save_button': save_btn, 'relevant_jobs': relevant_jobs, 'candidate_navbar': 1})
     
 	
