@@ -89,3 +89,10 @@ def job_detail(request,slug):
     return render(request, 'candidates/job_detail.html',{'job':job , 'profile':profile,'apply_button': apply_btn, 'save_button': save_btn, 'relevant_jobs': relevant_jobs, 'candidate_navbar': 1})
     
 	
+ 
+def saved_jobs(request):
+	jobs=SavedJobs.objects.filter(
+		user=request.user
+	).order_by('-date_posted')
+	
+	return render(request, 'candidates/saved_jobs.html',{'jobs':jobs,'candidate_navbar': 1})
