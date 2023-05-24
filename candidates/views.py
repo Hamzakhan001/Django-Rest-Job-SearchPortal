@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Job
+from .models import AppliedJobs,Profile,SavedJobs,Skill
 
 
 
@@ -96,3 +96,24 @@ def saved_jobs(request):
 	).order_by('-date_posted')
 	
 	return render(request, 'candidates/saved_jobs.html',{'jobs':jobs,'candidate_navbar': 1})
+
+def applied_jobs(request):
+    jobs=AppliedJobs.objects.filter(user=request.user).order_by('-date_posted')
+    statuses=[]
+    for job in jobs:
+        if Selected.objects.filter(job=job.job).filter(applicant=request.user).exists():
+            statuses.append(0)
+        elif Applicants.objects.filter(job=job.job).filter(applicant=request.user).exists():
+            statuses.append(1)
+        else:
+            statuses.append(2)
+    zipped=zip(jobs,statuses)
+    return render(request,'candidates/applied_jobs.html',{'zipped':zipped,'candidate_navbar':1})
+
+@login_required
+def intelligent_search(request):
+    relevant_jobs=[]
+    common=[]
+    job_skills=[]
+        
+    
