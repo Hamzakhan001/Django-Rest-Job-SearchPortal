@@ -236,3 +236,4 @@ def remove_job(request, slug):
     saved_job = SavedJobs.objects.filter(job=job, user=user).first()
     saved_job.delete()
     return HttpResponseRedirect('/job/{}'.format(job.slug))
+
